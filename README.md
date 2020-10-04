@@ -1,5 +1,5 @@
 # CodeIgniter 4 Application Starter + Auth
-##<b>Simple itegration Codeigniter 4.0.4 and delight-im/PHP-Aut.</b>
+## Simple itegration Codeigniter 4.0.4 and delight-im/PHP-Aut.
 ## What is CodeIgniter?
 
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible, and secure. 
