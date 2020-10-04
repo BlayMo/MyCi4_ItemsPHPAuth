@@ -66,3 +66,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 ## Auth Credits
 **Authentication for PHP. Simple, lightweight and secure.**
 - **Auth** (https://github.com/delight-im/PHP-Auth)
+
+## My thanks:
+- CodeIgniter Foundation.
+- delight-im/PHP-Auth
