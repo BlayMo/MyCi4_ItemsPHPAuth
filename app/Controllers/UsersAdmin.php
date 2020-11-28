@@ -73,29 +73,30 @@ class UsersAdmin extends BaseController {
 
     function __construct() {
         $this->Users_model = new UsersModel;
-        $this->oUsersEnt = new UsersEnt;
-        $this->retorno = 'users';
-        $this->template = 'templates/header_footer_default';
-        $this->vista = '';       
+        $this->oUsersEnt   = new UsersEnt;
+        $this->retorno     = 'users';
+        $this->template    = 'templates/header_footer_default';
+        $this->vista       = '';
     }
 
     public function index() {
         if ($this->canAdmin($this->oAuth)) {
-            $users = $this->Users_model->findAll();
+            $users       = $this->Users_model->findAll();
             $this->vista = 'users/users_admin_list';
-            $data = array(
+            $data        = array(
                 'users_data' => $users,
-                'session' => $this->session,
-                'navbar' => 'templates/main_navbar',
-                'botones' => $this->botones,
-                'oAuth' => $this->oAuth,
-                'roles' => $this->oAuth->getRoles()
+                'session'    => $this->session,
+                'navbar'     => 'templates/main_navbar',
+                'botones'    => $this->botones,
+                'oAuth'      => $this->oAuth,
+                'roles'      => $this->oAuth->getRoles()
             );
 
             $data['vista'] = $this->vista;
 
             return view($this->template, $data);
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -106,42 +107,43 @@ class UsersAdmin extends BaseController {
             $row = $this->Users_model->find($id);
 
             if ($row) {
-                $data = array(
-                    'button' => 'Actualizar',
-                    'action' => site_url('usersadmin/otromailOk'),
-                    'id' => set_value('id', $row->id),
-                    'email' => set_value('email', $row->email),
+                $data               = array(
+                    'button'   => 'Actualizar',
+                    'action'   => site_url('usersadmin/otromailOk'),
+                    'id'       => set_value('id', $row->id),
+                    'email'    => set_value('email', $row->email),
                     'newemail' => set_value('newemail', ''),
                     'username' => set_value('username', $row->username),
-                    'navbar' => 'templates/main_navbar',
+                    'navbar'   => 'templates/main_navbar',
                 );
-                $data['retorno'] = $this->retorno;
-                $data['vista'] = 'users/users_form_admin_otromail';
-                $data['session'] = $this->session;
+                $data['retorno']    = $this->retorno;
+                $data['vista']      = 'users/users_form_admin_otromail';
+                $data['session']    = $this->session;
                 $data['validation'] = $this->validation;
 
                 return view($this->template, $data);
-            } else {
+            }
+            else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
                 return redirect()->to(site_url($this->retorno));
             }
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
     }
 
     public function otromailOk() {
-        $id = $this->request->getPost('id', FILTER_SANITIZE_NUMBER_INT);
+        $id  = $this->request->getPost('id', FILTER_SANITIZE_NUMBER_INT);
         $row = $this->Users_model->find($id);
         if ($row) {
             $newemail = $this->request->getPost('newemail', FILTER_VALIDATE_EMAIL);
-            $this->Users_model->update($id,['email' => $newemail]);
-            
-            $this->session->setFlashdata('message', 'Email Actualizado'); 
-            
+            $this->Users_model->update($id, ['email' => $newemail]);
+
+            $this->session->setFlashdata('message', 'Email Actualizado');
         }
-        
+
         $this->index();
     }
 
@@ -152,33 +154,35 @@ class UsersAdmin extends BaseController {
 
             if ($row) {
 
-                $data = array(
-                    'button' => 'Actualizar',
-                    'action' => site_url('usersadmin/otrapassOk'),
-                    'id' => set_value('id', $row->id),
-                    'email' => set_value('email', $row->email),
+                $data               = array(
+                    'button'      => 'Actualizar',
+                    'action'      => site_url('usersadmin/otrapassOk'),
+                    'id'          => set_value('id', $row->id),
+                    'email'       => set_value('email', $row->email),
                     'newpassword' => set_value('newpassword', ''),
-                    'username' => set_value('username', $row->username),
-                    'navbar' => 'templates/main_navbar',
+                    'username'    => set_value('username', $row->username),
+                    'navbar'      => 'templates/main_navbar',
                 );
-                $data['retorno'] = $this->retorno;
-                $data['vista'] = 'users/users_form_admin_newpass';
-                $data['session'] = $this->session;
+                $data['retorno']    = $this->retorno;
+                $data['vista']      = 'users/users_form_admin_newpass';
+                $data['session']    = $this->session;
                 $data['validation'] = $this->validation;
 
                 return view($this->template, $data);
-            } else {
+            }
+            else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
                 $this->index();
             }
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
     }
 
     public function otrapassOk() {
-        $id = $this->request->getPost('id', FILTER_SANITIZE_NUMBER_INT);
+        $id  = $this->request->getPost('id', FILTER_SANITIZE_NUMBER_INT);
         $row = $this->Users_model->find($id);
         if ($row) {
 
@@ -186,15 +190,16 @@ class UsersAdmin extends BaseController {
             try {
                 $this->oAuth->admin()->changePasswordForUserById($id, $password);
                 $this->session->setFlashdata('message', 'Password actualizada');
-                
-            } catch (\Delight\Auth\InvalidPasswordException $e) {
-                
+            }
+            catch (\Delight\Auth\InvalidPasswordException $e) {
+
                 $this->session->setFlashdata('message', 'Password no valida');
                 $this->otrapass($id);
             }
 
             //$this->index();
-        }else{
+        }
+        else {
             $this->session->setFlashdata('message', 'Registro No Encontrado');
         }
         $this->index();
@@ -211,12 +216,14 @@ class UsersAdmin extends BaseController {
                     if ($rol == 2) {
                         $this->oAuth->admin()->addRoleForUserById($row->id, \Delight\Auth\Role::AUTHOR);
                     }
-                } catch (\Delight\Auth\UnknownIdException $e) {
+                }
+                catch (\Delight\Auth\UnknownIdException $e) {
                     $this->session->setFlashdata('message', 'Registro No Encontrado');
                 }
             }
             $this->index();
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -226,30 +233,32 @@ class UsersAdmin extends BaseController {
         if ($this->canAdmin($this->oAuth)) {
             $row = $this->Users_model->find($id);
             if ($row) {
-                $data = array(
-                    'id' => $row->id,
-                    'email' => $row->email,
-                    'password' => $row->password,
-                    'username' => $row->username,
-                    'status' => $row->status,
-                    'verified' => $row->verified,
-                    'resettable' => $row->resettable,
-                    'roles_mask' => $row->roles_mask,
-                    'registered' => $row->registered,
-                    'last_login' => $row->last_login,
+                $data            = array(
+                    'id'           => $row->id,
+                    'email'        => $row->email,
+                    'password'     => $row->password,
+                    'username'     => $row->username,
+                    'status'       => $row->status,
+                    'verified'     => $row->verified,
+                    'resettable'   => $row->resettable,
+                    'roles_mask'   => $row->roles_mask,
+                    'registered'   => $row->registered,
+                    'last_login'   => $row->last_login,
                     'force_logout' => $row->force_logout,
-                    'navbar' => 'templates/main_navbar',
+                    'navbar'       => 'templates/main_navbar',
                 );
                 $data['retorno'] = 'users';
-                $data['vista'] = 'users/users_read';
+                $data['vista']   = 'users/users_read';
                 $data['session'] = $this->session;
 
                 return view($this->template, $data);
-            } else {
+            }
+            else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
                 $this->index();
             }
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -257,22 +266,23 @@ class UsersAdmin extends BaseController {
 
     public function create() {
         if ($this->canAdmin($this->oAuth)) {
-            $data = array(
-                'button' => 'Crear',
-                'action' => site_url('usersadmin/createOk'),
-                'email' => set_value('email'),
+            $data               = array(
+                'button'   => 'Crear',
+                'action'   => site_url('usersadmin/createOk'),
+                'email'    => set_value('email'),
                 'password' => set_value('password'),
                 'username' => set_value('username'),
-                'navbar' => 'templates/main_navbar',
+                'navbar'   => 'templates/main_navbar',
             );
-            $data['retorno'] = $this->retorno;
-            $data['vista'] = 'users/users_form_admin_new';
-            $data['session'] = $this->session;
+            $data['retorno']    = $this->retorno;
+            $data['vista']      = 'users/users_form_admin_new';
+            $data['session']    = $this->session;
             $data['validation'] = $this->validation;
 
 
             return view($this->template, $data);
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -282,20 +292,24 @@ class UsersAdmin extends BaseController {
 
         if (!$this->new_rules()) {
             $this->create();
-        } else {
+        }
+        else {
 
-            $email = $this->request->getPost('email', FILTER_VALIDATE_EMAIL);
+            $email    = $this->request->getPost('email', FILTER_VALIDATE_EMAIL);
             $password = $this->request->getPost('password', FILTER_SANITIZE_STRING);
             $username = $this->request->getPost('username', FILTER_SANITIZE_STRING);
 
             try {
                 $userId = $this->oAuth->admin()->createUser($email, $password, $username);
                 $this->session->setFlashdata('message', 'Ud. Se ha registrado con el  ID ' . $userId);
-            } catch (\Delight\Auth\InvalidEmailException $e) {
+            }
+            catch (\Delight\Auth\InvalidEmailException $e) {
                 $this->session->setFlashdata('message', 'Email no valido');
-            } catch (\Delight\Auth\InvalidPasswordException $e) {
+            }
+            catch (\Delight\Auth\InvalidPasswordException $e) {
                 $this->session->setFlashdata('message', 'Password no valida');
-            } catch (\Delight\Auth\UserAlreadyExistsException $e) {
+            }
+            catch (\Delight\Auth\UserAlreadyExistsException $e) {
                 $this->session->setFlashdata('message', 'El usuario ya existe');
             }
 
@@ -309,34 +323,36 @@ class UsersAdmin extends BaseController {
 
             if ($row) {
 
-                $data = array(
-                    'button' => 'Actualizar',
-                    'action' => site_url('usersadmin/updateOk'),
-                    'id' => set_value('id', $row->id),
-                    'email' => set_value('email', $row->email),
-                    'password' => set_value('password', $row->password),
-                    'username' => set_value('username', $row->username),
-                    'status' => set_value('status', $row->status),
-                    'verified' => set_value('verified', $row->verified),
-                    'resettable' => set_value('resettable', $row->resettable),
-                    'roles_mask' => set_value('roles_mask', $row->roles_mask),
-                    'registered' => set_value('registered', $row->registered),
-                    'last_login' => set_value('last_login', $row->last_login),
+                $data               = array(
+                    'button'       => 'Actualizar',
+                    'action'       => site_url('usersadmin/updateOk'),
+                    'id'           => set_value('id', $row->id),
+                    'email'        => set_value('email', $row->email),
+                    'password'     => set_value('password', $row->password),
+                    'username'     => set_value('username', $row->username),
+                    'status'       => set_value('status', $row->status),
+                    'verified'     => set_value('verified', $row->verified),
+                    'resettable'   => set_value('resettable', $row->resettable),
+                    'roles_mask'   => set_value('roles_mask', $row->roles_mask),
+                    'registered'   => set_value('registered', $row->registered),
+                    'last_login'   => set_value('last_login', $row->last_login),
                     'force_logout' => set_value('force_logout', $row->force_logout),
-                    'navbar' => 'templates/main_navbar',
+                    'navbar'       => 'templates/main_navbar',
                 );
-                $data['retorno'] = $this->retorno;
-                $data['vista'] = 'users/users_form_admin_up';
-                $data['session'] = $this->session;
+                $data['retorno']    = $this->retorno;
+                $data['vista']      = 'users/users_form_admin_up';
+                $data['session']    = $this->session;
                 $data['validation'] = $this->validation;
 
 
                 return view($this->template, $data);
-            } else {
+            }
+            else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
                 return redirect()->to(site_url($this->retorno));
             }
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -346,17 +362,18 @@ class UsersAdmin extends BaseController {
         $id = $this->request->getPost('id', FILTER_SANITIZE_NUMBER_INT);
         if (!$this->up_rules()) {
             $this->update($id);
-        } else {
-           
+        }
+        else {
+
             $oData = $this->oUsersEnt;
-             
+
             $data = $this->request->getPost();
             $oData->fill($data);
 
             $this->Users_model->save($oData);
             $this->session->setFlashdata('message', 'Registro Actualizado');
 
-            
+
             $this->index();
         }
     }
@@ -369,15 +386,18 @@ class UsersAdmin extends BaseController {
                 try {
                     $this->auth->admin()->deleteUserById($id);
                     $this->session->setFlashdata('message', 'Registro Borrado');
-                } catch (\Delight\Auth\UnknownIdException $e) {
+                }
+                catch (\Delight\Auth\UnknownIdException $e) {
                     $this->session->setFlashdata('message', 'Registro No Encontrado');
                 }
-            } else {
+            }
+            else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
             }
 
             $this->index();
-        } else {
+        }
+        else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
             return redirect()->to(site_url('/'));
         }
@@ -387,7 +407,7 @@ class UsersAdmin extends BaseController {
         $this->validation->reset();
 
         $rules = array(
-            'email' => ['label' => 'Email', 'rules' => 'trim|required|string'],
+            'email'    => ['label' => 'Email', 'rules' => 'trim|required|string'],
             'password' => ['label' => 'Password', 'rules' => 'trim|required|string'],
             'username' => ['label' => 'Username', 'rules' => 'trim|required|string'],
         );
@@ -401,7 +421,7 @@ class UsersAdmin extends BaseController {
 
         $rules = array(
             'username' => ['label' => 'Username', 'rules' => 'trim|required|string'],
-            'id' => 'trim');
+            'id'       => 'trim');
 
         $this->validation->setRules($rules);
         return $this->validate($rules);
