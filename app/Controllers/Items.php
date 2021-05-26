@@ -82,18 +82,17 @@ class Items extends BaseController
     private $cat_filtro = 0;    
    
         
-    function __construct()
-    {
-        $this->Items_model = new ItemsModel;
+    function __construct() {
+        $this->Items_model      = new ItemsModel;
         $this->Categorias_model = new CategoriasModel;
-        $this->oEnt = new ItemsEnt; 
-        $this->oCat = new CatLib();
-        $this->retorno = 'items';
-        $this->template = 'templates/header_footer_default';
-        $this->vista = 'items/items_list';
-        $this->orden = $this->Items_model->order;
-        $this->todo_categorias = new \stdClass();
-        $this->todo_subcat = new \stdClass();
+        $this->oEnt             = new ItemsEnt;
+        $this->oCat             = new CatLib();
+        $this->retorno          = 'items';
+        $this->template         = 'templates/header_footer_default';
+        $this->vista            = 'items/items_list';
+        $this->orden            = $this->Items_model->order;
+        $this->todo_categorias  = new \stdClass();
+        $this->todo_subcat      = new \stdClass();
     }
 
     public function index( $paginado = false ) {

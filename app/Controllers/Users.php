@@ -90,21 +90,21 @@ class Users extends BaseController
         
     }
     
-    public function Entrar(){      
-        
+    public function Entrar() {
+
         $data = array();
-        
-        $data['password'] = set_value('password', '');
-        $data['email'] = set_value('email', '');
-        $data['session'] = $this->session;
+
+        $data['password']   = set_value('password', '');
+        $data['email']      = set_value('email', '');
+        $data['session']    = $this->session;
         $data['validation'] = $this->validation;
-        $data['action'] = 'users/mylogin';
-        $data['retorno'] = 'items';
-        $data['vista'] = 'login_form_02';
-        
-        echo view( 'templates/header_footer_default', $data);
+        $data['action']     = 'users/mylogin';
+        $data['retorno']    = 'items';
+        $data['vista']      = 'login_form_02';
+
+        echo view('templates/header_footer_default', $data);
     }
-    
+
     public function mylogin() {
 
         $ret = 'login';
