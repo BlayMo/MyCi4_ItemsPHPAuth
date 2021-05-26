@@ -149,12 +149,12 @@ class Users extends BaseController
         return $this->validate($rules);
     }
 
-    public function salir(){
-        $this->oAuth->logOut();
-        $this->oAuth->destroySession();
-        $this->session->setFlashdata('message', 'Is LogOut');
-        return redirect()->to(site_url('items'));
-    }
+//    public function salir(){
+//        $this->oAuth->logOut();
+//        $this->oAuth->destroySession();
+//        $this->session->setFlashdata('message', 'Is LogOut');
+//        return redirect()->to(site_url('items'));
+//    }
     
     //------------------ my cuenta -------------------------
     // modificar mail y password del usuario logeado

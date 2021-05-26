@@ -135,16 +135,7 @@ class BaseController extends Controller {
                  $db->pdo['username'], $db->pdo['password']));
         
         $this->oAuth = new \Delight\Auth\Auth($dbh);
-        
-//        if (!$this->oAuth->isLoggedIn()) {
-//            $this->session->set('is_login', false);
-//            $this->session->set('is_admin', false);
-//            $this->session->set('id_user', 0);
-//            $this->session->set('username', '');
-//        } else {
-//            //users/mylogin            
-//        }
-           
+                   
     }
     
     //roles autorizados en edicion
@@ -214,7 +205,7 @@ class BaseController extends Controller {
             if ($this->oAuth->hasRole(\Delight\Auth\Role::SUPER_ADMIN)) {
                 $this->session->set('is_admin', true);
             }
-            //$this->session->set('is_admin', true);//solo test
+            $this->session->set('is_admin', true);//solo test
             $this->session->set('id_user', $this->oAuth->getUserId());
             $this->session->set('username', $this->oAuth->getUsername());
             

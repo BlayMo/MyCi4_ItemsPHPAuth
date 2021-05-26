@@ -144,7 +144,7 @@ class UsersAdmin extends BaseController {
             $this->session->setFlashdata('message', 'Email Actualizado');
         }
 
-        $this->index();
+        return redirect()->to(site_url($this->retorno));
     }
 
     //cambia password a un usuario no logeado
@@ -172,7 +172,7 @@ class UsersAdmin extends BaseController {
             }
             else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
-                $this->index();
+                return redirect()->to(site_url($this->retorno));
             }
         }
         else {
@@ -202,7 +202,7 @@ class UsersAdmin extends BaseController {
         else {
             $this->session->setFlashdata('message', 'Registro No Encontrado');
         }
-        $this->index();
+        return redirect()->to(site_url($this->retorno));
     }
 
     public function grupo($id, $rol) {
@@ -212,6 +212,7 @@ class UsersAdmin extends BaseController {
                 try {
                     if ($rol == 1) {
                         $this->oAuth->admin()->addRoleForUserById($row->id, \Delight\Auth\Role::ADMIN);
+                        $this->oAuth->admin()->addRoleForUserById($row->id, \Delight\Auth\Role::SUPER_ADMIN);
                     }
                     if ($rol == 2) {
                         $this->oAuth->admin()->addRoleForUserById($row->id, \Delight\Auth\Role::AUTHOR);
@@ -221,7 +222,8 @@ class UsersAdmin extends BaseController {
                     $this->session->setFlashdata('message', 'Registro No Encontrado');
                 }
             }
-            $this->index();
+//            $this->index();
+            return redirect()->to(site_url('users'));
         }
         else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
@@ -255,7 +257,7 @@ class UsersAdmin extends BaseController {
             }
             else {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
-                $this->index();
+                return redirect()->to(site_url('users'));
             }
         }
         else {
@@ -313,7 +315,7 @@ class UsersAdmin extends BaseController {
                 $this->session->setFlashdata('message', 'El usuario ya existe');
             }
 
-            $this->index();
+            return redirect()->to(site_url('users'));
         }
     }
 
@@ -373,8 +375,7 @@ class UsersAdmin extends BaseController {
             $this->Users_model->save($oData);
             $this->session->setFlashdata('message', 'Registro Actualizado');
 
-
-            $this->index();
+            return redirect()->to(site_url('users'));
         }
     }
 
@@ -395,7 +396,7 @@ class UsersAdmin extends BaseController {
                 $this->session->setFlashdata('message', 'Registro No Encontrado');
             }
 
-            $this->index();
+            return redirect()->to(site_url('users'));
         }
         else {
             $this->session->setFlashdata('message', 'Ud. No esta autorizado');
