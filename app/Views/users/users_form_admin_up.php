@@ -57,7 +57,7 @@
  * 
  */
 
-
+print_r($roles);
 ?>
 <div class='card shadow mb-4' style='margin-bottom: 50px' >
     <div class='card-header py-3'>
@@ -91,12 +91,17 @@
                 <input type="text" class="form-control"  id="resettable" placeholder="Resettable" value="<?php echo $resettable; ?>" readonly/>
             </div>
             <div class="form-group">
-                <label for="int">Roles Mask <?php echo '<span style="color:red"><small>' . $validation->getError('roles_mask') . '</small></span>' ?></label>
-                <input type="text" class="form-control"  id="roles_mask" placeholder="Roles Mask" value="<?php echo $roles_mask; ?>" readonly/>
+                <label for="int">Roles :</label>
+                
+                <?php foreach ($roles as $value) {
+                    echo $value.' / ';
+                }
+                ?>
+                
             </div>
             <div class="form-group">
                 <label for="int">Registered <?php echo '<span style="color:red"><small>' . $validation->getError('registered') . '</small></span>' ?></label>
-                <input type="text" class="form-control"  id="registered" placeholder="Registered" value="<?php echo $registered; ?>" readonly />
+                <input type="text" class="form-control"  id="registered" value="<?php echo date(DATE_COOKIE,$registered); ?>" readonly />
             </div>
             <div class="form-group">
                 <label for="int">Last Login <?php echo '<span style="color:red"><small>' . $validation->getError('last_login') . '</small></span>' ?></label>

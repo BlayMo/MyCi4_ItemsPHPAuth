@@ -339,6 +339,7 @@ class UsersAdmin extends BaseController {
                     'registered'   => set_value('registered', $row->registered),
                     'last_login'   => set_value('last_login', $row->last_login),
                     'force_logout' => set_value('force_logout', $row->force_logout),
+                    'roles'        => $this->oAuth->getRoles(),
                     'navbar'       => 'templates/main_navbar',
                 );
                 $data['retorno']    = $this->retorno;
@@ -408,9 +409,9 @@ class UsersAdmin extends BaseController {
         $this->validation->reset();
 
         $rules = array(
-            'email'    => ['label' => 'Email', 'rules' => 'trim|required|string'],
-            'password' => ['label' => 'Password', 'rules' => 'trim|required|string'],
-            'username' => ['label' => 'Username', 'rules' => 'trim|required|string'],
+            'email'    => ['label' => 'Email',    'rules' => 'trim|required|valid_email'],
+            'password' => ['label' => 'Password', 'rules' => 'trim|required|alpha_numeric_punct'],
+            'username' => ['label' => 'Username', 'rules' => 'trim|required|alpha'],
         );
 
         $this->validation->setRules($rules);
@@ -421,7 +422,7 @@ class UsersAdmin extends BaseController {
         $this->validation->reset();
 
         $rules = array(
-            'username' => ['label' => 'Username', 'rules' => 'trim|required|string'],
+            'username' => ['label' => 'Username', 'rules' => 'trim|required|alpha'],
             'id'       => 'trim');
 
         $this->validation->setRules($rules);
