@@ -76,6 +76,10 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use Config\Database;
 use Faker;
+use Detection\MobileDetect;
+use HTMLPurifier_HTML5Config;
+use HTMLPurifier;
+use App\Models\UsersModel;
 
 defined('FILAS') || define('FILAS', 5);
 defined('WORDS') || define('WORDS', 50);
@@ -92,8 +96,12 @@ class BaseController extends Controller {
      * @var array
      */
     protected $helpers = ['url', 'form', 'text'];
-    protected $security, $session, $validation,
-            $botones, $faker, $oAuth;
+
+    
+    protected $security, $session, $validation, $botones, $faker, 
+              $cerrar_session, $is_admin, $is_login,  $limpia, $oAuth;
+    
+    protected $pantalla;
 
     /**
      * Constructor.
@@ -107,31 +115,35 @@ class BaseController extends Controller {
         //--------------------------------------------------------------------
         // E.g.:
         
-        $this->session = \Config\Services::session();
+        $this->session    = \Config\Services::session();
         $this->validation = \Config\Services::validation();
-        $this->security = \Config\Services::security();
-        $this->faker = Faker\Factory::create();
-        $this->pager = \Config\Services::Pager();
-        $this->botones = config('Botones');
+        $this->security   = \Config\Services::security();
+        $this->faker      = Faker\Factory::create();
+        $this->pager      = \Config\Services::Pager();
+        $this->botones    = config('Botones');
+        $this->pantalla   = new MobileDetect();
+        $config           = HTMLPurifier_HTML5Config::createDefault();
+        $this->limpia     = new HTMLPurifier($config);
 
         $this->db = Database::connect();
 
         //-------------------- conexion con auth ----------------
         $db = new Database();     
-          
-        $dbh = new \PDO("mysql:dbname={$db->pdo['database']};host={$db->pdo['hostname']};charset={$db->pdo['charset']}",
-                $db->pdo['username'], $db->pdo['password']);
+       
+        $dbh = \Delight\Db\PdoDatabase::fromDsn(new \Delight\Db\PdoDsn("mysql:dbname={$db->pdo['database']};"
+        . "host={$db->pdo['hostname']};charset={$db->pdo['charset']}",
+                 $db->pdo['username'], $db->pdo['password']));
         
         $this->oAuth = new \Delight\Auth\Auth($dbh);
         
-        if (!$this->oAuth->isLoggedIn()) {
-            $this->session->set('is_login', false);
-            $this->session->set('is_admin', false);
-            $this->session->set('id_user', 0);
-            $this->session->set('username', '');
-        } else {
-            //users/mylogin            
-        }
+//        if (!$this->oAuth->isLoggedIn()) {
+//            $this->session->set('is_login', false);
+//            $this->session->set('is_admin', false);
+//            $this->session->set('id_user', 0);
+//            $this->session->set('username', '');
+//        } else {
+//            //users/mylogin            
+//        }
            
     }
     
@@ -187,5 +199,82 @@ class BaseController extends Controller {
                         \Delight\Auth\Role::TRANSLATOR
         );
     }
+    
+    protected function user_online() {
+        if (!$this->oAuth->isLoggedIn()) {
+            $this->session->set('is_login', false);
+            $this->session->set('is_admin', false);
+            $this->session->set('id_user', 0);
+            $this->session->set('username', '');
+            $this->session->set('tiempo', 0);
+        }
+        else {            
+            $this->session->set('is_login', true);
+            $this->session->set('is_admin', false);
+            if ($this->oAuth->hasRole(\Delight\Auth\Role::SUPER_ADMIN)) {
+                $this->session->set('is_admin', true);
+            }
+            //$this->session->set('is_admin', true);//solo test
+            $this->session->set('id_user', $this->oAuth->getUserId());
+            $this->session->set('username', $this->oAuth->getUsername());
+            
+            if ($this->session->tiempo === 0) {
+                $user_model = new UsersModel();
+                $row = $user_model->find($this->session->id_user);
+                $tiempo = time();
+                if ($row){
+                    $tiempo = $row->last_login;
+                }
+                $this->session->set('tiempo', (int)$tiempo);
+            }
+        }
+
+        //---------------- compruebo dispositivo ------------
+        if ($this->pantalla->isMobile()) {
+            $this->session->set('es_movil', true);
+        }
+        else {
+            $this->session->set('es_movil', false);
+        }
+//        $this->session->set('es_movil', true);//solo test
+        //---------------------------------------------------
+        
+        $ahora  = time();
+        $online = 0;
+        if ($this->session->tiempo > 0) {
+            $online = $ahora - $this->session->tiempo;
+            $this->session->setFlashdata('message_login', '<strong>On Line... ' . intval($online / 60) . ' / ' . $this->session->username . '</strong>');
+        }
+
+        if (($online) > TIEMPO_SESSION) {
+            return $this->salir();
+        }
+        else {
+
+            return $this;
+        }
+    }
+
+    public function salir() {        
+        $salir = true;
+        try {
+            //$this->oAuth->logOutEverywhere();
+            $this->oAuth->logOut();
+        }
+        catch (\Delight\Auth\NotLoggedInException $e) {
+            //die('Not logged in');
+             $this->session->setFlashdata('message', $e.' -Not logged in');
+             $salir = false;
+        }
+        
+        if ($salir){
+            $this->session->setFlashdata('message_login', '');
+            //$this->session->destroy();
+            $this->oAuth->destroySession();
+        }
+        
+        return redirect()->to(site_url('items'));
+    }
+
 
 }

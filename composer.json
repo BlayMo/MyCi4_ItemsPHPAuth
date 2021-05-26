@@ -7,7 +7,9 @@
 	"require": {
 		"php": ">=7.2",
 		"codeigniter4/framework": "^4",		
-		"codeigniter4/translations": "^4.0",
+		"codeigniter4/translations": "^4.0",               
+		"mobiledetect/mobiledetectlib": "^2.8",                
+		"xemlock/htmlpurifier-html5": "^0.1.11",
 		"delight-im/auth": "^8.2"
 	},
 	"require-dev": {

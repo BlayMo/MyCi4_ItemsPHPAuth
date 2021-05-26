@@ -96,6 +96,8 @@ class Items extends BaseController
     }
 
     public function index( $paginado = false ) {
+        $this->user_online();
+        
         if ($paginado) {
             if ($this->cat_filtro != 0) {
                 $items = $this->Items_model
@@ -117,16 +119,16 @@ class Items extends BaseController
         }
 
         $data = array(
-            'items_data' => $items,
-            'session' => $this->session,
-            'paginado' => $paginado,
-            'pager' => $this->Items_model->pager,
-            'botones' => $this->botones,
-            'faker' => $this->faker,
+            'items_data'           => $items,
+            'session'              => $this->session,
+            'paginado'             => $paginado,
+            'pager'                => $this->Items_model->pager,
+            'botones'              => $this->botones,
+            'faker'                => $this->faker,
             'todo_categorias_data' => $this->todo_categorias,
-            'todo_subcat_data' => $this->todo_subcat,            
+            'todo_subcat_data'     => $this->todo_subcat,
         );
-        
+
         //variables para login_form
         $data['password'] = set_value('password', '');
         $data['email'] = set_value('email', '');
@@ -217,16 +219,16 @@ class Items extends BaseController
         $row = $this->Items_model->find($id);
         if ($row) {
             $data = array(
-		'id_item' => $row->id_item,
-		'iditem' => $row->iditem,
-		'id_categoria' => $row->id_categoria,
-		'item' => $row->item,
-		'texto_item' => $row->texto_item,
-                'created_at' => $row->created_at,
-		'updated_at' => $row->updated_at,
-		'deleted_at' => $row->deleted_at,
-		'session' => $this->session 
-	    );
+                'id_item'      => $row->id_item,
+                'iditem'       => $row->iditem,
+                'id_categoria' => $row->id_categoria,
+                'item'         => $row->item,
+                'texto_item'   => $row->texto_item,
+                'created_at'   => $row->created_at,
+                'updated_at'   => $row->updated_at,
+                'deleted_at'   => $row->deleted_at,
+                'session'      => $this->session
+            );
             
             $data['retorno'] = 'items';
             $data['vista'] = 'items/items_read';
@@ -240,16 +242,16 @@ class Items extends BaseController
 
     public function create( $id_categoria = 1 ) 
     {
-        $data = array(
-            'button' => 'Create',
-            'action' => site_url('newitok'),
-	    'id_item' => set_value('id_item'),
-	    'iditem' => set_value('iditem'),
-	    'id_categoria' => set_value('id_categoria',$id_categoria),
-	    'item' => set_value('item',$this->faker->company),
-	    'texto_item' => set_value('texto_item',$this->faker->realText(400, 2)),
-            'categoria' => $this->oCat,            
-	);
+        $data               = array(
+            'button'       => 'Create',
+            'action'       => site_url('newitok'),
+            'id_item'      => set_value('id_item'),
+            'iditem'       => set_value('iditem'),
+            'id_categoria' => set_value('id_categoria', $id_categoria),
+            'item'         => set_value('item', $this->faker->company),
+            'texto_item'   => set_value('texto_item', $this->faker->realText(400, 2)),
+            'categoria'    => $this->oCat,
+        );
         $data['retorno'] = $this->retorno;
         $data['vista']   = 'items/items_form_new';
         $data['session'] = $this->session;
@@ -283,15 +285,15 @@ class Items extends BaseController
             $row = $this->Items_model->find($id);
 
             if ($row) {
-                $data = array(
-                    'button' => 'Update',
-                    'action' => site_url('upok'),
-                    'id_item' => set_value('id_item', $row->id_item),
-                    'iditem' => set_value('iditem', $row->iditem),
+                $data               = array(
+                    'button'       => 'Update',
+                    'action'       => site_url('upok'),
+                    'id_item'      => set_value('id_item', $row->id_item),
+                    'iditem'       => set_value('iditem', $row->iditem),
                     'id_categoria' => set_value('id_categoria', $row->id_categoria),
-                    'item' => set_value('item', $row->item),
-                    'texto_item' => set_value('texto_item', $row->texto_item),
-                    'categoria' => $this->oCat
+                    'item'         => set_value('item', $row->item),
+                    'texto_item'   => set_value('texto_item', $row->texto_item),
+                    'categoria'    => $this->oCat
                 );
                 $data['retorno'] = $this->retorno;
                 $data['vista'] = 'items/items_form_up';
@@ -360,15 +362,15 @@ class Items extends BaseController
         $this->Items_model->truncate();
         $cats = $this->Categorias_model->findAll();
         foreach ($cats as $value) {
-            
-            $id_cats[] = $value->id_categoria;            
+
+            $id_cats[] = $value->id_categoria;
         }
         for ($i = 1; $i <= 100; $i++) {
-            
-            $oData = $this->oEnt;
-            $oData->iditem = random_string('alnum', 32);
-            $oData->item = 'Item ' . $this->faker->company;
-            $oData->texto_item = $this->faker->realText(400, 2);
+
+            $oData               = $this->oEnt;
+            $oData->iditem       = random_string('alnum', 32);
+            $oData->item         = 'Item ' . $this->faker->company;
+            $oData->texto_item   = $this->faker->realText(400, 2);
             $oData->id_categoria = $this->faker->randomElement($id_cats);
             $this->Items_model->save($oData);
         }
@@ -376,6 +378,5 @@ class Items extends BaseController
         $this->session->setFlashdata('message', 'Regenerada Tabla Items');
         $this->index();
     }
-
 
 }
