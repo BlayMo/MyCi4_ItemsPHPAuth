@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codeigniter4/framework",
-            "version": "v4.1.2",
+            "version": "v4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeigniter4/framework.git",
-                "reference": "0bf61820417a3e4a6e7f6c725c5cccf285a1b7c4"
+                "reference": "3416a0b4ca5c824f639beaf43f9e5b7e87511c5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/0bf61820417a3e4a6e7f6c725c5cccf285a1b7c4",
-                "reference": "0bf61820417a3e4a6e7f6c725c5cccf285a1b7c4",
+                "url": "https://api.github.com/repos/codeigniter4/framework/zipball/3416a0b4ca5c824f639beaf43f9e5b7e87511c5c",
+                "reference": "3416a0b4ca5c824f639beaf43f9e5b7e87511c5c",
                 "shasum": ""
             },
             "require": {
@@ -61,20 +61,20 @@
                 "slack": "https://codeigniterchat.slack.com",
                 "source": "https://github.com/codeigniter4/CodeIgniter4"
             },
-            "time": "2021-05-18T02:07:31+00:00"
+            "time": "2021-06-05T23:58:18+00:00"
         },
         {
             "name": "codeigniter4/translations",
-            "version": "v4.1.2",
+            "version": "v4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeigniter4/translations.git",
-                "reference": "cccb3c35fd5067a9689cc6502f16c1544c39b18b"
+                "reference": "b027264477251493c6ee9be19a0db0c00b499dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeigniter4/translations/zipball/cccb3c35fd5067a9689cc6502f16c1544c39b18b",
-                "reference": "cccb3c35fd5067a9689cc6502f16c1544c39b18b",
+                "url": "https://api.github.com/repos/codeigniter4/translations/zipball/b027264477251493c6ee9be19a0db0c00b499dce",
+                "reference": "b027264477251493c6ee9be19a0db0c00b499dce",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
                 "slack": "https://codeigniterchat.slack.com",
                 "source": "https://github.com/codeigniter4/translations"
             },
-            "time": "2021-05-18T16:47:07+00:00"
+            "time": "2021-06-06T13:06:43+00:00"
         },
         {
             "name": "delight-im/auth",
@@ -874,5 +874,5 @@
         "php": ">=7.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

@@ -195,7 +195,7 @@ class App extends BaseConfig
 	     // session database
         public $sessionDriver            = 'CodeIgniter\Session\Handlers\DatabaseHandler';
 	public $sessionCookieName        = '8f41f5a3d9cae8d23e991580672e5c92';
-	public $sessionExpiration        = 7200;
+	public $sessionExpiration        = 0;
         public $sessionSavePath          = 'ci_sessions';
 	public $sessionMatchIP           = false;
 	public $sessionTimeToUpdate      = 300;
@@ -255,12 +255,14 @@ class App extends BaseConfig
 	| CSRFRegenerate  = Regenerate token on every submission
 	| CSRFRedirect    = Redirect to previous page with error on failure
 	*/
-	public $CSRFTokenName  = 'csrf_test_name';
+        
+        
+	public $CSRFTokenName  = '33d55f75097174749c3f37eb77439e51';
 	public $CSRFHeaderName = 'X-CSRF-TOKEN';
 	public $CSRFCookieName = 'csrf_cookie_name';
-	public $CSRFExpire     = 7200;
-	public $CSRFRegenerate = true;
-	public $CSRFRedirect   = true;
+	public $CSRFExpire     = 30;
+	public $CSRFRegenerate = false;
+	public $CSRFRedirect   = false;
 
 	/*
 	|--------------------------------------------------------------------------
